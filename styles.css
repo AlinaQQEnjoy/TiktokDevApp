@@ -159,6 +159,19 @@ footer p {
   font-size: 14px;
 }
 
+.code-output {
+  min-height: 88px;
+  margin: 0;
+  padding: 18px;
+  overflow-x: auto;
+  background: #111827;
+  color: #e5e7eb;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
 @media (max-width: 760px) {
   .site-header {
     align-items: flex-start;
