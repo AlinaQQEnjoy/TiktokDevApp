@@ -1,4 +1,4 @@
-# Short-Form Video Manager Pages
+# Video Publishing Manager Pages
 
 This repository contains three static pages that can be published with GitHub Pages:
 
