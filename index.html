@@ -3,95 +3,127 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Video Publishing Manager Review Demo</title>
-  <meta name="description" content="A web app to manage and publish short-form sticker video content to TikTok.">
+  <title>Video Publishing Manager</title>
+  <meta name="description" content="Video Publishing Manager helps creators organize short-form videos, prepare captions, and manage publishing status.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header compact">
+  <aside class="sidebar">
     <a class="brand" href="index.html">Video Publishing Manager</a>
-    <nav aria-label="Main navigation">
-      <a href="callback.html">Callback</a>
+    <nav aria-label="App navigation">
+      <a href="#dashboard" class="active">Dashboard</a>
+      <a href="#queue">Video Queue</a>
+      <a href="#caption">Caption Editor</a>
+      <a href="#publishing">Publishing</a>
+      <a href="#settings">Settings</a>
       <a href="terms-of-service.html">Terms</a>
       <a href="privacy-policy.html">Privacy</a>
     </nav>
-  </header>
+  </aside>
 
-  <main class="demo-layout">
-    <section class="panel primary">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">TikTok Developer Review Demo</p>
-          <h1>End-to-End TikTok Integration</h1>
-          <p>Connect a TikTok account, preview today's dated folder, initialize Content Posting API publishing, then upload the selected video to the sandbox flow.</p>
+  <main class="app-shell" id="dashboard">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Creator workspace</p>
+        <h1>Daily Short-Form Video Publishing</h1>
+      </div>
+      <div class="account-pill">
+        <span class="status-dot"></span>
+        Sandbox account connected
+      </div>
+    </header>
+
+    <section class="metrics" aria-label="Publishing summary">
+      <article>
+        <span>Ready Today</span>
+        <strong>3</strong>
+      </article>
+      <article>
+        <span>Scheduled</span>
+        <strong>7</strong>
+      </article>
+      <article>
+        <span>Published</span>
+        <strong>28</strong>
+      </article>
+      <article>
+        <span>Needs Review</span>
+        <strong>1</strong>
+      </article>
+    </section>
+
+    <section class="workgrid">
+      <article class="panel queue-panel" id="queue">
+        <div class="panel-head">
+          <div>
+            <h2>Video Queue</h2>
+            <p>Videos are grouped by publishing date and processed oldest first.</p>
+          </div>
+          <button type="button" id="refreshQueue">Refresh</button>
         </div>
-        <span class="badge">Sandbox</span>
-      </div>
 
-      <div class="steps">
-        <article class="step">
-          <span class="num">1</span>
-          <div>
-            <h3>Connect TikTok</h3>
-            <p>Uses Login Kit OAuth with the configured redirect URI and requested scopes.</p>
-            <button id="connectBtn">Open TikTok Authorization</button>
-          </div>
-        </article>
+        <table>
+          <thead>
+            <tr>
+              <th>Date folder</th>
+              <th>Video</th>
+              <th>Status</th>
+              <th>Next action</th>
+            </tr>
+          </thead>
+          <tbody id="queueRows"></tbody>
+        </table>
+      </article>
 
-        <article class="step">
-          <span class="num">2</span>
-          <div>
-            <h3>Preview Today's Video</h3>
-            <p>Reads the folder named with today's date and builds the final caption.</p>
-            <button id="previewBtn">Preview Video</button>
-          </div>
-        </article>
+      <article class="panel" id="caption">
+        <h2>Caption Editor</h2>
+        <label for="videoName">Video name</label>
+        <input id="videoName" value="cozy desk sticker scene">
 
-        <article class="step">
-          <span class="num">3</span>
-          <div>
-            <h3>Initialize Content Posting API</h3>
-            <p>Calls TikTok creator_info/query and video/init with the selected video metadata.</p>
-            <button id="initBtn">Run Sandbox API Init</button>
-          </div>
-        </article>
+        <label for="captionText">Generated caption</label>
+        <textarea id="captionText" rows="5"></textarea>
 
-        <article class="step">
-          <span class="num">4</span>
-          <div>
-            <h3>Upload Video And Fetch Status</h3>
-            <p>Uploads the video chunks to TikTok's upload_url, then fetches publish status.</p>
-            <button id="uploadBtn">Upload To Sandbox</button>
-          </div>
-        </article>
-      </div>
-    </section>
+        <div class="tag-row" aria-label="Hashtags">
+          <span>#stickers</span>
+          <span>#DIY</span>
+          <span>#satisfying</span>
+          <span>#asmr</span>
+          <span>#scenestickers</span>
+        </div>
+        <button type="button" id="generateCaption">Regenerate Caption</button>
+      </article>
 
-    <section class="panel details">
-      <h2>Current Video</h2>
-      <dl>
-        <dt>Date folder</dt>
-        <dd id="dateFolder">-</dd>
-        <dt>Video file</dt>
-        <dd id="videoFile">-</dd>
-        <dt>Caption</dt>
-        <dd id="caption">-</dd>
-        <dt>Publish ID</dt>
-        <dd id="publishId">-</dd>
-        <dt>Status</dt>
-        <dd id="status">Ready</dd>
-      </dl>
-    </section>
+      <article class="panel" id="publishing">
+        <h2>Publishing Workflow</h2>
+        <ol class="workflow">
+          <li><strong>Authorize account</strong><span>Login Kit OAuth grants publishing permission.</span></li>
+          <li><strong>Validate creator settings</strong><span>Creator info confirms privacy choices and video limits.</span></li>
+          <li><strong>Initialize upload</strong><span>Content Posting API returns publish ID and upload URL.</span></li>
+          <li><strong>Upload video</strong><span>Video is uploaded in verified chunks and status is tracked.</span></li>
+        </ol>
+        <button type="button" id="runDemo">Run Publishing Preview</button>
+      </article>
 
-    <section class="panel log-panel">
-      <h2>API Activity</h2>
-      <pre id="log" class="code-output">Waiting for action...</pre>
+      <article class="panel" id="settings">
+        <h2>Workspace Settings</h2>
+        <dl class="settings-list">
+          <dt>Timezone</dt>
+          <dd>America/New_York</dd>
+          <dt>Posting time</dt>
+          <dd>8:00 PM daily</dd>
+          <dt>Default privacy during review</dt>
+          <dd>Self only</dd>
+          <dt>Caption template</dt>
+          <dd>ASMR | Scene Sticker - &lt;video name&gt;.</dd>
+        </dl>
+      </article>
+
+      <article class="panel activity-panel">
+        <h2>Activity Log</h2>
+        <pre id="activityLog" class="code-output">Ready. Select a queue item or run the publishing preview.</pre>
+      </article>
     </section>
   </main>
-
-  <footer>
-    <p>&copy; 2026 Video Publishing Manager. This service is not affiliated with TikTok.</p>
-  </footer>
 
   <script src="app.js"></script>
 </body>
