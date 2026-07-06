@@ -77,6 +77,16 @@
           <button type="button" id="refreshQueue">Refresh Queue</button>
         </div>
 
+        <div class="local-picker">
+          <div>
+            <h3>Local video source</h3>
+            <p>Select an MP4 or MOV file from the creator's computer before preparing the caption and publishing flow.</p>
+          </div>
+          <input id="localVideoInput" type="file" accept="video/mp4,video/quicktime,.mp4,.mov" hidden>
+          <button type="button" id="chooseVideo">Choose Local Video</button>
+        </div>
+        <div id="selectedVideoCard" class="selected-video" hidden></div>
+
         <table>
           <thead>
             <tr>

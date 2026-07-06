@@ -9,6 +9,8 @@ const queueRows = document.querySelector('#queueRows');
 const captionText = document.querySelector('#captionText');
 const videoName = document.querySelector('#videoName');
 const activityLog = document.querySelector('#activityLog');
+const localVideoInput = document.querySelector('#localVideoInput');
+const selectedVideoCard = document.querySelector('#selectedVideoCard');
 
 function renderQueue() {
   queueRows.innerHTML = queue.map((item, index) => `
@@ -25,6 +27,22 @@ function buildCaption(name) {
   return `ASMR | Scene Sticker - ${name}. #stickers #DIY #satisfying #asmr #scenestickers`;
 }
 
+function formatBytes(bytes) {
+  if (!Number.isFinite(bytes)) return 'Unknown size';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+  return `${value.toFixed(value >= 10 || unit === 0 ? 0 : 1)} ${units[unit]}`;
+}
+
+function cleanVideoName(filename) {
+  return filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+}
+
 function setActivity(payload) {
   activityLog.textContent = typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2);
 }
@@ -37,13 +55,51 @@ queueRows.addEventListener('click', (event) => {
   const row = event.target.closest('tr');
   if (!row) return;
   const item = queue[Number(row.dataset.index)];
-  videoName.value = item.video.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+  videoName.value = cleanVideoName(item.video);
   refreshCaption();
   setActivity({
     selected_video: item.video,
     date_folder: item.date,
     status: item.status,
     next_action: item.action
+  });
+});
+
+
+document.querySelector('#chooseVideo').addEventListener('click', () => {
+  localVideoInput.click();
+});
+
+localVideoInput.addEventListener('change', () => {
+  const file = localVideoInput.files && localVideoInput.files[0];
+  if (!file) return;
+
+  const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const cleanedName = cleanVideoName(file.name);
+  const localItem = {
+    date: today,
+    video: file.name,
+    status: 'Local file selected',
+    action: 'Prepare caption and publish preview'
+  };
+
+  queue.unshift(localItem);
+  renderQueue();
+  videoName.value = cleanedName;
+  refreshCaption();
+
+  selectedVideoCard.hidden = false;
+  selectedVideoCard.innerHTML = `
+    <strong>${file.name}</strong>
+    <span>${formatBytes(file.size)} · ${file.type || 'video file'}</span>
+  `;
+
+  setActivity({
+    action: 'Local video selected',
+    file_name: file.name,
+    file_size: formatBytes(file.size),
+    browser_note: 'The browser displays the selected file without exposing the private local folder path.',
+    generated_caption: captionText.value
   });
 });
 
