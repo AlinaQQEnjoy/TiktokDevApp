@@ -9,7 +9,10 @@
 </head>
 <body>
   <aside class="sidebar">
-    <a class="brand" href="index.html">Video Publishing Manager</a>
+    <a class="brand" href="index.html">
+      <span class="brand-mark">VP</span>
+      <span>Video Publishing Manager</span>
+    </a>
     <nav aria-label="App navigation">
       <a href="#dashboard" class="active">Dashboard</a>
       <a href="#queue">Video Queue</a>
@@ -19,6 +22,10 @@
       <a href="terms-of-service.html">Terms</a>
       <a href="privacy-policy.html">Privacy</a>
     </nav>
+    <div class="sidebar-note">
+      <span class="status-dot"></span>
+      Sandbox workspace active
+    </div>
   </aside>
 
   <main class="app-shell" id="dashboard">
@@ -26,10 +33,14 @@
       <div>
         <p class="eyebrow">Creator workspace</p>
         <h1>Daily Short-Form Video Publishing</h1>
+        <p class="header-copy">Organize dated video folders, prepare captions, and track each publishing step from one production dashboard.</p>
       </div>
-      <div class="account-pill">
-        <span class="status-dot"></span>
-        Sandbox account connected
+      <div class="header-actions">
+        <div class="account-pill">
+          <span class="status-dot"></span>
+          Sandbox account connected
+        </div>
+        <button type="button" class="secondary-button">Export Status</button>
       </div>
     </header>
 
@@ -37,18 +48,22 @@
       <article>
         <span>Ready Today</span>
         <strong>3</strong>
+        <small>Oldest video first</small>
       </article>
       <article>
         <span>Scheduled</span>
         <strong>7</strong>
+        <small>Next 7 days</small>
       </article>
       <article>
         <span>Published</span>
         <strong>28</strong>
+        <small>This month</small>
       </article>
       <article>
         <span>Needs Review</span>
         <strong>1</strong>
+        <small>Caption pending</small>
       </article>
     </section>
 
@@ -59,7 +74,7 @@
             <h2>Video Queue</h2>
             <p>Videos are grouped by publishing date and processed oldest first.</p>
           </div>
-          <button type="button" id="refreshQueue">Refresh</button>
+          <button type="button" id="refreshQueue">Refresh Queue</button>
         </div>
 
         <table>
@@ -76,7 +91,10 @@
       </article>
 
       <article class="panel" id="caption">
-        <h2>Caption Editor</h2>
+        <div class="panel-title-row">
+          <h2>Caption Editor</h2>
+          <span class="mini-badge">Auto template</span>
+        </div>
         <label for="videoName">Video name</label>
         <input id="videoName" value="cozy desk sticker scene">
 
@@ -94,7 +112,10 @@
       </article>
 
       <article class="panel" id="publishing">
-        <h2>Publishing Workflow</h2>
+        <div class="panel-title-row">
+          <h2>Publishing Workflow</h2>
+          <span class="mini-badge blue">API flow</span>
+        </div>
         <ol class="workflow">
           <li><strong>Authorize account</strong><span>Login Kit OAuth grants publishing permission.</span></li>
           <li><strong>Validate creator settings</strong><span>Creator info confirms privacy choices and video limits.</span></li>
@@ -105,7 +126,10 @@
       </article>
 
       <article class="panel" id="settings">
-        <h2>Workspace Settings</h2>
+        <div class="panel-title-row">
+          <h2>Workspace Settings</h2>
+          <span class="mini-badge neutral">Configured</span>
+        </div>
         <dl class="settings-list">
           <dt>Timezone</dt>
           <dd>America/New_York</dd>
@@ -119,7 +143,10 @@
       </article>
 
       <article class="panel activity-panel">
-        <h2>Activity Log</h2>
+        <div class="panel-title-row">
+          <h2>Activity Log</h2>
+          <span class="mini-badge neutral">Live preview</span>
+        </div>
         <pre id="activityLog" class="code-output">Ready. Select a queue item or run the publishing preview.</pre>
       </article>
     </section>
